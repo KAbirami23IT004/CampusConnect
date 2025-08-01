@@ -2,257 +2,126 @@
 <html lang="en" ng-app="leaderboardApp" ng-controller="LeaderboardController">
 <head>
   <meta charset="UTF-8">
-  <title>Leaderboard | CampusConnect</title>
+  <title>Leaderboard | CampusConnect+</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AngularJS -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: url("tceBG.png") center/cover no-repeat;
-    }
-
-    .site-header {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 30px;
-      background: #fff;
-      border-bottom: 1px solid #ccc;
-      align-items: center;
-    }
-
-    .header-left, .header-right {
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-left a, .nav-right a {
-      margin: 0 10px;
-      text-decoration: none;
-      font-weight: 600;
-      color: #222;
-    }
-
-    .brand-title {
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .signup-btn {
-      margin-left: 10px;
-      background: black;
-      color: white;
-      padding: 6px 14px;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .logo {
-      height: 50px;
-    }
-
-    .flash-banner {
-      background: #111;
-      color: #fff;
-      padding: 8px;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .leaderboard-container {
-      display: flex;
-      padding: 30px;
-      gap: 20px;
-    }
-
-    .left-panel {
-      flex: 3;
-    }
-
-    .controls {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .controls input, .controls select {
-      padding: 8px;
-      font-size: 14px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-
-    .leader-card {
-      display: flex;
-      align-items: center;
-      background: rgba(255,255,255,0.95);
-      padding: 15px;
-      margin-bottom: 12px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .avatar {
-      height: 70px;
-      width: 70px;
-      border-radius: 50%;
-      margin-right: 20px;
-    }
-
-    .info p {
-      margin: 5px 0;
-    }
-
-    .coin {
-      height: 16px;
-      vertical-align: middle;
-    }
-
-    .right-panel {
-      flex: 1;
-      background: #f1f8e9;
-      padding: 20px;
-      border-radius: 10px;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    .goal-icon {
-      height: 24px;
-      vertical-align: middle;
-      margin-right: 6px;
-    }
-
-    .right-panel ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
-
-    .achievement {
-      margin-bottom: 15px;
-      background: white;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .badge {
-      font-size: 20px;
-      margin-right: 8px;
-    }
-
-    footer {
-      text-align: center;
-      background: #111;
-      color: white;
-      padding: 12px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
 </head>
-<body>
-<header class="site-header">
-  <div class="header-left">
-    <img src="logo.png" class="logo" alt="Logo">
-    <nav class="nav-left">
-      <a href="experiencesharing.html">Experience Sharing Feed</a>
-      <a href="noticeboard.html">Notice Board</a>
-      <a href="teamformation.html">Team Formation</a>
-      <a href="findmentors.html">Find Mentors</a>
-    </nav>
-  </div>
-  <div class="brand-title">CampusConnect+</div>
-  <div class="header-right">
-    <nav class="nav-right">
-      <a href="home.html">Home</a>
-    </nav>
-    <a href="profile.html">
-  <button class="signup-btn">Profile</button>
-</a>
-    </button>
-  </div>
-</header>
-<div class="flash-banner">
-  <marquee behavior="scroll" direction="left">🚀 IT DEPARTMENT LEADS!!! 🚀</marquee>
-</div>
-<div class="leaderboard-container">
-  <div class="left-panel">
-    <div class="controls">
-      <input type="text" ng-model="searchText" placeholder="Search by name or department">
-      <select ng-model="selectedDept">
-        <option value="">Department wise</option>
-        <option ng-repeat="dept in departments">{{ dept }}</option>
-      </select>
-    </div>
+<body class="bg-gray-50 text-gray-800 font-sans">
 
-    <div class="leader-card" ng-repeat="user in leaderboard | filter:searchText | filter:filterDept">
-      <img src="avatar.jpg" class="avatar" alt="Avatar">
-      <div class="info">
-        <p><strong>{{ user.name }}</strong></p>
-        <p>{{ user.department }}</p>
-        <p><img src="coin.jpg" class="coin"> {{ user.coins | number }} coins</p>
+  <!-- ✅ Header -->
+  <header class="bg-white border-b shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-16">
+      <div class="flex items-center gap-3">
+        <img src="logo.png" alt="Logo" class="h-10 w-10">
+        <span class="text-xl font-bold">CampusConnect+</span>
+      </div>
+      <nav class="flex items-center gap-6 text-sm font-medium text-gray-700">
+        <a href="findmentors.html" class="hover:text-blue-600">Find Mentors</a>
+        <a href="experiencesharing.html" class="hover:text-blue-600">Experience Sharing Feed</a>
+        <a href="leaderboard.html" class="hover:text-blue-600">Leaderboard</a>
+        <a href="teamformation.html" class="hover:text-blue-600">Team Formation</a>
+        <a href="home.html" class="hover:text-blue-600">Home</a>
+        <a href="profile.html">
+          <button class="bg-black text-white px-4 py-1.5 rounded hover:bg-gray-800">Profile</button>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Flash Banner -->
+  <div class="bg-black text-white text-center py-2 font-semibold">
+    <marquee behavior="scroll" direction="left">🚀 IT DEPARTMENT LEADS!!! 🚀</marquee>
+  </div>
+
+  <!-- Leaderboard Body -->
+  <div class="max-w-6xl mx-auto px-4 py-10 flex flex-col lg:flex-row gap-8">
+
+    <!-- Left Panel -->
+    <div class="flex-1">
+      <div class="flex flex-col sm:flex-row gap-4 mb-6">
+        <input type="text" ng-model="searchText" placeholder="Search by name or department"
+               class="w-full sm:w-1/2 p-2 border rounded">
+        <select ng-model="selectedDept" class="w-full sm:w-1/3 p-2 border rounded">
+          <option value="">Department wise</option>
+          <option ng-repeat="dept in departments">{{ dept }}</option>
+        </select>
+      </div>
+
+      <!-- Leader Cards -->
+      <div ng-repeat="user in leaderboard | filter:searchText | filter:filterDept"
+           class="flex items-center bg-white p-4 rounded-lg shadow mb-4">
+        <img src="avatar.jpg" alt="Avatar" class="w-16 h-16 rounded-full mr-4">
+        <div>
+          <p class="font-bold text-lg">{{ user.name }}</p>
+          <p class="text-sm text-gray-600">{{ user.department }}</p>
+          <p class="text-sm mt-1"><img src="coin.jpg" class="inline h-4"> {{ user.coins | number }} coins</p>
+        </div>
       </div>
     </div>
+
+    <!-- Right Panel -->
+    <div class="w-full lg:w-1/3 bg-lime-50 p-6 rounded-lg shadow">
+      <h3 class="text-lg font-semibold mb-4 flex items-center"><img src="goal.jpg" class="h-6 mr-2">Achievements</h3>
+      <ul class="space-y-4">
+        <li ng-repeat="achieve in achievements | limitTo:5" class="bg-white p-4 rounded shadow">
+          <span class="text-xl mr-2">🏅</span>
+          <strong>{{ achieve.title }}</strong>
+          <br><small>{{ achieve.description }}</small>
+        </li>
+      </ul>
+    </div>
   </div>
 
-  <div class="right-panel">
-    <h3><img src="goal.jpg" class="goal-icon"> Achievements</h3>
-    <ul>
-      <li ng-repeat="achieve in achievements | limitTo:5" class="achievement">
-        <span class="badge">🏅</span>
-        <strong>{{ achieve.title }}</strong><br>
-        <small>{{ achieve.description }}</small>
-      </li>
-    </ul>
-  </div>
-</div>
-<footer>
-  © 2025 Campus Connect. All rights reserved.
-</footer>
-<script>
-  const app = angular.module('leaderboardApp', ['ngAnimate']);
-  app.filter('capitalize', function () {
-    return function (input) {
-      return input ? input.charAt(0).toUpperCase() + input.slice(1).toLowerCase() : '';
-    };
-  });
-  app.service('LeaderboardService', function () {
-    this.getLeaderboard = function () {
-      return [
-        { name: 'Arun', department: 'IT', coins: 5000 },
-        { name: 'Balaji', department: 'CSE', coins: 4500 },
-        { name: 'Chozhan', department: 'IT', coins: 4700 },
-        { name: 'Devi', department: 'ECE', coins: 4300 }
-      ];
-    };
-    this.getAchievements = function () {
-      return [
-        { title: 'Hackathon Winner', description: '1st Prize at National Level Smart India Hackathon' },
-        { title: 'Top Mentor', description: 'Guided over 50 juniors in tech & project building' },
-        { title: 'College Ambassador', description: 'Selected as Campus Ambassador for Google DSC' },
-        { title: 'Most Active Member', description: 'Posted weekly insights in experience sharing feed' },
-        { title: 'Research Publication', description: 'IEEE paper on Smart City IoT in International Journal' }
-      ];
-    };
-  });
-  app.controller('LeaderboardController', ['$scope', 'LeaderboardService', function($scope, LeaderboardService) {
-    $scope.departments = ['IT', 'CSE', 'ECE', 'MECH', 'CIVIL'];
-    $scope.leaderboard = LeaderboardService.getLeaderboard();
-    $scope.achievements = LeaderboardService.getAchievements();
-    $scope.selectedDept = '';
+  <!-- Footer -->
+  <footer class="text-center bg-black text-white py-4">
+    © 2025 Campus Connect. All rights reserved.
+  </footer>
 
-    $scope.filterDept = function(user) {
-      return !$scope.selectedDept || user.department === $scope.selectedDept;
-    };
-  }]);
-</script>
+  <!-- ✅ AngularJS Script -->
+  <script>
+    const app = angular.module('leaderboardApp', []);
+
+    // Factory Service
+    app.factory('LeaderboardService', function () {
+      return {
+        getLeaderboard: function () {
+          return [
+            { name: 'Arun', department: 'IT', coins: 5000 },
+            { name: 'Balaji', department: 'CSE', coins: 4500 },
+            { name: 'Chozhan', department: 'IT', coins: 4700 },
+            { name: 'Devi', department: 'ECE', coins: 4300 }
+          ];
+        },
+        getAchievements: function () {
+          return [
+            { title: 'Hackathon Winner', description: '1st Prize at National Level Smart India Hackathon' },
+            { title: 'Top Mentor', description: 'Guided over 50 juniors in tech & project building' },
+            { title: 'College Ambassador', description: 'Selected as Campus Ambassador for Google DSC' },
+            { title: 'Most Active Member', description: 'Posted weekly insights in experience sharing feed' },
+            { title: 'Research Publication', description: 'IEEE paper on Smart City IoT in International Journal' }
+          ];
+        }
+      };
+    });
+
+    // Controller
+    app.controller('LeaderboardController', ['$scope', 'LeaderboardService', function($scope, LeaderboardService) {
+      $scope.departments = ['IT', 'CSE', 'ECE', 'MECH', 'CIVIL'];
+      $scope.leaderboard = LeaderboardService.getLeaderboard();
+      $scope.achievements = LeaderboardService.getAchievements();
+      $scope.selectedDept = '';
+
+      $scope.filterDept = function(user) {
+        return !$scope.selectedDept || user.department === $scope.selectedDept;
+      };
+    }]);
+  </script>
 
 </body>
 </html>
+
