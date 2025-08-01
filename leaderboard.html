@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="leaderboardApp" ng-controller="LeaderboardController">
+<head>
+  <meta charset="UTF-8">
+  <title>Leaderboard | CampusConnect</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url("tceBG.png") center/cover no-repeat;
+    }
+
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 30px;
+      background: #fff;
+      border-bottom: 1px solid #ccc;
+      align-items: center;
+    }
+
+    .header-left, .header-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-left a, .nav-right a {
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .signup-btn {
+      margin-left: 10px;
+      background: black;
+      color: white;
+      padding: 6px 14px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    .flash-banner {
+      background: #111;
+      color: #fff;
+      padding: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .leaderboard-container {
+      display: flex;
+      padding: 30px;
+      gap: 20px;
+    }
+
+    .left-panel {
+      flex: 3;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .controls input, .controls select {
+      padding: 8px;
+      font-size: 14px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .leader-card {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.95);
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .avatar {
+      height: 70px;
+      width: 70px;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+
+    .info p {
+      margin: 5px 0;
+    }
+
+    .coin {
+      height: 16px;
+      vertical-align: middle;
+    }
+
+    .right-panel {
+      flex: 1;
+      background: #f1f8e9;
+      padding: 20px;
+      border-radius: 10px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .goal-icon {
+      height: 24px;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    .right-panel ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .achievement {
+      margin-bottom: 15px;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .badge {
+      font-size: 20px;
+      margin-right: 8px;
+    }
+
+    footer {
+      text-align: center;
+      background: #111;
+      color: white;
+      padding: 12px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-left">
+    <img src="logo.png" class="logo" alt="Logo">
+    <nav class="nav-left">
+      <a href="experiencesharing.html">Experience Sharing Feed</a>
+      <a href="noticeboard.html">Notice Board</a>
+      <a href="teamformation.html">Team Formation</a>
+      <a href="findmentors.html">Find Mentors</a>
+    </nav>
+  </div>
+  <div class="brand-title">CampusConnect+</div>
+  <div class="header-right">
+    <nav class="nav-right">
+      <a href="home.html">Home</a>
+    </nav>
+    <a href="profile.html">
+  <button class="signup-btn">Profile</button>
+</a>
+    </button>
+  </div>
+</header>
+<div class="flash-banner">
+  <marquee behavior="scroll" direction="left">🚀 IT DEPARTMENT LEADS!!! 🚀</marquee>
+</div>
+<div class="leaderboard-container">
+  <div class="left-panel">
+    <div class="controls">
+      <input type="text" ng-model="searchText" placeholder="Search by name or department">
+      <select ng-model="selectedDept">
+        <option value="">Department wise</option>
+        <option ng-repeat="dept in departments">{{ dept }}</option>
+      </select>
+    </div>
+
+    <div class="leader-card" ng-repeat="user in leaderboard | filter:searchText | filter:filterDept">
+      <img src="avatar.jpg" class="avatar" alt="Avatar">
+      <div class="info">
+        <p><strong>{{ user.name }}</strong></p>
+        <p>{{ user.department }}</p>
+        <p><img src="coin.jpg" class="coin"> {{ user.coins | number }} coins</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <h3><img src="goal.jpg" class="goal-icon"> Achievements</h3>
+    <ul>
+      <li ng-repeat="achieve in achievements | limitTo:5" class="achievement">
+        <span class="badge">🏅</span>
+        <strong>{{ achieve.title }}</strong><br>
+        <small>{{ achieve.description }}</small>
+      </li>
+    </ul>
+  </div>
+</div>
+<footer>
+  © 2025 Campus Connect. All rights reserved.
+</footer>
+<script>
+  const app = angular.module('leaderboardApp', ['ngAnimate']);
+  app.filter('capitalize', function () {
+    return function (input) {
+      return input ? input.charAt(0).toUpperCase() + input.slice(1).toLowerCase() : '';
+    };
+  });
+  app.service('LeaderboardService', function () {
+    this.getLeaderboard = function () {
+      return [
+        { name: 'Arun', department: 'IT', coins: 5000 },
+        { name: 'Balaji', department: 'CSE', coins: 4500 },
+        { name: 'Chozhan', department: 'IT', coins: 4700 },
+        { name: 'Devi', department: 'ECE', coins: 4300 }
+      ];
+    };
+    this.getAchievements = function () {
+      return [
+        { title: 'Hackathon Winner', description: '1st Prize at National Level Smart India Hackathon' },
+        { title: 'Top Mentor', description: 'Guided over 50 juniors in tech & project building' },
+        { title: 'College Ambassador', description: 'Selected as Campus Ambassador for Google DSC' },
+        { title: 'Most Active Member', description: 'Posted weekly insights in experience sharing feed' },
+        { title: 'Research Publication', description: 'IEEE paper on Smart City IoT in International Journal' }
+      ];
+    };
+  });
+  app.controller('LeaderboardController', ['$scope', 'LeaderboardService', function($scope, LeaderboardService) {
+    $scope.departments = ['IT', 'CSE', 'ECE', 'MECH', 'CIVIL'];
+    $scope.leaderboard = LeaderboardService.getLeaderboard();
+    $scope.achievements = LeaderboardService.getAchievements();
+    $scope.selectedDept = '';
+
+    $scope.filterDept = function(user) {
+      return !$scope.selectedDept || user.department === $scope.selectedDept;
+    };
+  }]);
+</script>
+
+</body>
+</html>

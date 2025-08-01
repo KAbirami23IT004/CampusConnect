@@ -1,0 +1,96 @@
+<html lang="en" ng-app="campusApp">
+<head>
+  <title>CampusConnect+</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body class="font-sans min-h-screen bg-cover bg-center" style="background-image: url('tcebg.png');" ng-controller="MainController">
+  <header class="bg-white shadow-md py-4 px-8 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <img src="logo.png" alt="Logo" class="w-12 h-12">
+      <h1 class="text-2xl font-bold text-gray-800">CampusConnect+</h1>
+    </div>
+    <nav class="space-x-6 font-medium text-gray-700">
+      <a href="findmentors.html">Find Mentors</a>
+      <a href="experiencesharing.html">Experience Sharing Feed</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="noticeboard.html">Notice Board</a>
+      <a href="teamformation.html">Team Formation</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">
+  <button class="bg-black text-white px-5 py-2 rounded">Sign Up</button>
+</a>
+    </nav>
+  </header>
+  <div class="text-center mt-6">
+    <input
+      ng-model="userName"
+      placeholder="Enter your name"
+      class="border border-gray-400 px-4 py-2 rounded w-64"
+    />
+  </div>
+  <section
+    class="relative bg-cover bg-center h-screen text-white flex flex-col justify-center items-center text-center px-4">
+    <div class="bg-black bg-opacity-50 p-8 rounded-xl max-w-3xl">
+      <h1 class="text-4xl sm:text-5xl font-bold mb-4 leading-tight">
+        Hi {{ userName || 'Guest' }}, Welcome back to CampusConnect+.<br />
+        Let's build, learn, and grow together
+      </h1>
+      <p class="mb-6 text-lg">
+        Connect with experienced seniors or faculty mentors in your domain.
+      </p>
+      <div class="space-x-6">
+        <button ng-click="setView('team')" class="bg-white text-black font-semibold px-6 py-3 rounded-lg">Explore Teams</button>
+        <button ng-click="setView('mentors')" class="bg-pink-600 text-white font-semibold px-6 py-3 rounded-lg">Find Mentor</button>
+      </div>
+    </div>
+  </section>
+  <section class="p-10">
+    <div ng-show="currentView === 'team'" class="bg-gray-100 p-6 rounded-xl">
+      <h2 class="text-2xl font-bold mb-4">Team Formation</h2>
+      <p>Form or join project teams with like-minded peers. Your team ID is: <strong>{{ sharedService.teamCode }}</strong></p>
+    </div>
+    <div ng-show="currentView === 'mentors'" class="bg-yellow-100 p-6 rounded-xl">
+      <h2 class="text-2xl font-bold mb-4">Find Mentors</h2>
+      <p>Search for mentors in your domain. Our top mentor this week is: <strong>{{ mentorTopper }}</strong></p>
+    </div>
+    <div ng-show="currentView === 'notice'" class="bg-green-100 p-6 rounded-xl">
+      <h2 class="text-2xl font-bold mb-4">Notice Board</h2>
+      <p>{{ constant.NOTICE }}</p>
+    </div>
+    <div ng-show="currentView === 'leaderboard'" class="bg-blue-100 p-6 rounded-xl">
+      <h2 class="text-2xl font-bold mb-4">Leaderboard</h2>
+      <p>Current top scorer: {{ topStudent }}</p>
+    </div>
+    <div ng-show="currentView === 'feed'" class="bg-purple-100 p-6 rounded-xl">
+      <h2 class="text-2xl font-bold mb-4">Experience Sharing Feed</h2>
+      <p>{{ experienceMessage }}</p>
+    </div>
+  </section>
+  <footer class="text-center py-3 bg-black text-white text-sm">
+  &copy; 2025 Campus Connect. All rights reserved.
+</footer>
+
+  <script>
+    const app = angular.module('campusApp', []);
+    app.value('constant', {
+      NOTICE: 'Hackathon 2025 registrations are open now!'
+    });
+    app.service('sharedService', function() {
+      this.teamCode = 'TCE#456';
+    });
+    app.controller('MainController', function($scope, constant, sharedService) {
+      $scope.userName = '';
+      $scope.currentView = ''; 
+      $scope.constant = constant;
+      $scope.sharedService = sharedService;
+      $scope.topStudent = 'Varshini C';
+      $scope.mentorTopper = 'Dr. Ram Kumar';
+      $scope.experienceMessage = 'Participated in Smart India Hackathon. Amazing journey!';
+      $scope.setView = function(view) {
+        $scope.currentView = view;
+      };
+    });
+  </script>
+</body>
+</html>

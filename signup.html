@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="campusApp">
+<head>
+  <title>CampusConnect+ | Sign Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body class="font-sans min-h-screen flex flex-col bg-cover bg-center" style="background-image: url('tceBG.png');" ng-controller="SignUpController">
+
+  <header class="bg-white shadow-lg py-4 px-8">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center space-x-4">
+        <img src="logo.png" class="w-12 h-12" />
+        <h1 class="text-2xl font-bold text-gray-800">CampusConnect+</h1>
+      </div>
+      <a href="login.html">
+        <button class="bg-black text-white px-5 py-2 rounded">Login</button>
+      </a>
+    </div>
+  </header>
+  <br>
+  <div class="flex-grow flex items-center justify-center" ng-if="!registered">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Sign Up</h2>
+      <form name="signUpForm" ng-submit="submitForm()">
+        <div class="mb-4" custom-input>
+          <label class="block mb-2 text-gray-700 font-semibold">Full Name</label>
+          <input type="text" ng-model="user.fullName" required class="w-full px-4 py-2 border rounded-lg" placeholder="Enter your full name">
+        </div>
+        <div class="mb-4" custom-input>
+          <label class="block mb-2 text-gray-700 font-semibold">Email</label>
+          <input type="email" ng-model="user.email" required class="w-full px-4 py-2 border rounded-lg" placeholder="Enter your email">
+        </div>
+        <div class="mb-4" custom-input>
+          <label class="block mb-2 text-gray-700 font-semibold">Password</label>
+          <input type="password" ng-model="user.password" required class="w-full px-4 py-2 border rounded-lg" placeholder="Create a password">
+        </div>
+        <div class="mb-4" custom-input>
+          <label class="block mb-2 text-gray-700 font-semibold">Register As</label>
+          <select ng-model="user.role" required class="w-full px-4 py-2 border rounded-lg">
+            <option value="" disabled selected>Select Role</option>
+            <option value="student">Student</option>
+            <option value="mentor">Mentor</option>
+          </select>
+        </div>
+        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700">Sign Up</button>
+      </form>
+      <div class="mt-4 text-center text-red-500" ng-if="errorMessage">
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+  <div class="flex-grow flex items-center justify-center text-center" ng-if="registered">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <h2 class="text-3xl font-bold text-green-600 mb-4">Registration Successful!</h2>
+      <p class="text-lg text-gray-800">You registered successfully as {{ user.role }}: <strong>{{ user.fullName }}</strong></p>
+    </div>
+  </div>
+  <footer class="text-center py-3 bg-black text-white text-sm">
+    &copy; 2025 Campus Connect. All rights reserved.
+  </footer>
+  <script>
+    angular.module('campusApp', [])
+    
+    //CUSTOM SERVICE
+    .service('UserService', function() {
+      this.saveUser = function(user) {
+        console.log('Saved user:', user); 
+      };
+    })
+
+    // CUSTOM FACTORY
+    .factory('LoggerFactory', function() {
+      return {
+        log: function(message) {
+          console.log('[Logger]: ' + message);
+        }
+      };
+    })
+
+    // CUSTOM DIRECTIVE
+    .directive('customInput', function() {
+      return {
+        restrict: 'A',
+        link: function(scope, element) {
+          element.css({
+            transition: 'transform 0.2s ease-in-out'
+          });
+          element.on('mouseenter', function() {
+            element.css('transform', 'scale(1.02)');
+          });
+          element.on('mouseleave', function() {
+            element.css('transform', 'scale(1)');
+          });
+        }
+      };
+    })
+    //CONTROLLER 
+    .controller('SignUpController', function($scope, $timeout, UserService, LoggerFactory) {
+      $scope.user = {};
+      $scope.errorMessage = '';
+      $scope.registered = false;
+
+      $scope.submitForm = function() {
+        if (!$scope.user.fullName || !$scope.user.email || !$scope.user.password || !$scope.user.role) {
+          $scope.errorMessage = 'Please fill in all fields correctly.';
+          LoggerFactory.log('Validation failed: incomplete form.');
+        } else {
+          $scope.errorMessage = '';
+          UserService.saveUser($scope.user);
+          LoggerFactory.log('User registered: ' + $scope.user.email);
+          $timeout(function() {
+            $scope.registered = true;
+          }, 500); 
+        }
+      };
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="campusApp">
+<head>
+  <title>Find Mentors | CampusConnect+</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body class="font-sans min-h-screen bg-cover bg-center" style="background-image: url('tcebg.png');" ng-controller="MentorController">
+  <header class="bg-white shadow-md py-4 px-8 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <img src="logo.png" alt="Logo" class="w-12 h-12">
+      <h1 class="text-2xl font-bold text-gray-800">CampusConnect+</h1>
+    </div>
+    <nav class="space-x-6 font-medium text-gray-700">
+      <a href="experiencesharing.html">Experience Sharing Feed</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="noticeboard.html">Notice Board</a>
+      <a href="teamformation.html">Team Formation</a>
+      <a href="home.html">Home</a>
+      <a href="profile.html">
+  <button class="bg-black text-white px-5 py-2 rounded">Profile</button>
+</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section
+    class="relative bg-cover bg-center h-[60vh] text-white flex flex-col justify-center items-center text-center px-4">
+    <div class="bg-black bg-opacity-50 p-8 rounded-xl max-w-3xl">
+      <h1 class="text-4xl sm:text-5xl font-bold mb-4 leading-tight">
+        FIND MENTORS
+      </h1>
+      <p class="italic text-lg text-gray-200">
+        "Connect with experienced guides to help you grow in academics, projects, or career"
+      </p>
+    </div>
+  </section>
+
+  <!-- Mentor List -->
+  <section class="p-10 bg-white">
+    <div class="mb-6 text-center">
+      <input
+        type="text"
+        ng-model="searchText"
+        placeholder="Search mentors by name, department, tags..."
+        class="w-full md:w-1/2 border border-gray-400 px-4 py-2 rounded"
+      />
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div
+        ng-repeat="mentor in mentors | filter:searchText"
+        class="bg-gray-50 rounded-xl shadow-md p-5 text-center"
+      >
+        <div class="w-16 h-16 bg-black rounded-full mx-auto mb-3"></div>
+        <h3 class="text-lg font-semibold">{{ mentor.name }}</h3>
+        <p class="text-sm text-gray-600 mb-1">Role: {{ mentor.role }}</p>
+        <p class="text-sm text-gray-600 mb-1">Department: {{ mentor.department }}</p>
+        <p class="text-sm text-gray-600 mb-1">Expertise Tags: {{ mentor.tags }}</p>
+        <p class="text-sm text-green-600 mb-2">Availability Status: {{ mentor.status }}</p>
+
+        <button
+          ng-click="requestMentor(mentor)"
+          ng-disabled="mentor.status === 'Requested'"
+          class="mt-2 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-50"
+        >
+          {{ mentor.status === 'Requested' ? 'Requested' : 'Request Mentorship' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="flex justify-center mt-8">
+      <button class="bg-white border border-black text-black px-6 py-2 rounded hover:bg-gray-100">
+        View More
+      </button>
+    </div>
+  </section>
+  <footer class="text-center py-3 bg-black text-white text-sm">
+  &copy; 2025 Campus Connect. All rights reserved.
+</footer>
+
+  <!-- AngularJS Script -->
+  <script>
+    const app = angular.module('campusApp', []);
+
+    app.service('MentorService', function() {
+      this.getMentors = function () {
+        return [
+          {
+            name: 'Arjun S',
+            role: 'Student (Final Year)',
+            department: 'CSE',
+            tags: 'App development',
+            status: 'Available'
+          },
+          {
+            name: 'Mr Ram',
+            role: 'Faculty',
+            department: 'Information Technology',
+            tags: 'AI/ML',
+            status: 'Available'
+          },
+          {
+            name: 'Varshini',
+            role: 'Student (3rd Yr)',
+            department: 'Information Technology',
+            tags: 'Web App',
+            status: 'Available'
+          },
+          {
+            name: 'Dr Kumar',
+            role: 'Faculty',
+            department: 'ECE',
+            tags: 'IoT',
+            status: 'Available'
+          }
+        ];
+      };
+    });
+
+    app.controller('MentorController', function($scope, MentorService) {
+      $scope.searchText = '';
+      $scope.mentors = MentorService.getMentors();
+
+      $scope.requestMentor = function(mentor) {
+        mentor.status = 'Requested';
+      };
+    });
+  </script>
+  
+</body>
+</html>

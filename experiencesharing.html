@@ -1,0 +1,90 @@
+<html lang="en" ng-app="experienceApp">
+<head>
+  <title>Experience Sharing Feed</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body class="font-sans min-h-screen bg-cover bg-center" style="background-image: url('tcebg.png');" ng-controller="ExperienceController">
+  <header class="bg-white shadow-md py-4 px-8 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <img src="logo.png" alt="Logo" class="w-12 h-12">
+      <h1 class="text-2xl font-bold text-gray-800">CampusConnect+</h1>
+    </div>
+    <nav class="space-x-6 font-medium text-gray-700">
+      <a href="findmentors.html">Find Mentors</a>
+      <a href="experiencesharing.html">Experience Sharing Feed</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="noticeboard.html">Notice Board</a>
+      <a href="teamformation.html">Team Formation</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">
+        <button class="bg-black text-white px-5 py-2 rounded">Profile</button>
+      </a>
+    </nav>
+  </header>
+  <section class="text-center mt-10">
+    <h2 class="text-4xl font-bold text-black drop-shadow">🎤 Experience Sharing Feed</h2>
+    <input type="text" ng-model="searchText" placeholder="🔍 Search by domain..." class="mt-4 px-4 py-2 rounded border w-80 shadow">
+  </section>
+  <section class="max-w-4xl mx-auto mt-10 bg-white bg-opacity-80 backdrop-blur-sm p-8 rounded-xl shadow-xl">
+    <h3 class="text-xl font-bold mb-4 text-gray-800">Share Your Experience</h3>
+    <form ng-submit="addExperience()">
+      <div class="grid md:grid-cols-3 gap-4">
+        <input ng-model="newExperience.name" placeholder="Your Name" class="p-2 border rounded" required />
+        <input ng-model="newExperience.domain" placeholder="Domain (e.g., ML)" class="p-2 border rounded" required />
+        <input ng-model="newExperience.date" type="date" class="p-2 border rounded" required />
+      </div>
+      <textarea ng-model="newExperience.message" placeholder="Your story..." rows="4" class="w-full mt-4 p-2 border rounded" required></textarea>
+      <button type="submit" class="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded">Post</button>
+    </form>
+  </section>
+  <section class="max-w-4xl mx-auto mt-10">
+    <div ng-repeat="exp in experiences | filter:searchText | orderBy:'-date'" class="bg-white bg-opacity-80 backdrop-blur-sm p-6 mb-6 rounded-xl shadow-md transition duration-300 hover:scale-[1.01] custom-fade">
+      <div class="flex justify-between">
+        <h4 class="text-xl font-semibold">{{ exp.name }} <span class="text-sm text-gray-500">({{ exp.domain | uppercase }})</span></h4>
+        <p class="text-gray-600 text-sm">{{ exp.date | date:'mediumDate' }}</p>
+      </div>
+      <p class="mt-2 text-gray-800">{{ exp.message }}</p>
+    </div>
+  </section>
+  <footer class="text-center py-3 bg-black text-white text-sm">
+  &copy; 2025 Campus Connect. All rights reserved.
+</footer>
+
+  <script>
+    const app = angular.module('experienceApp', []);
+    app.service('ExperienceService', function() {
+      const experiences = [
+        { name: "Varshini C", domain: "AI/ML", message: "Built an AQI prediction model for Chennai!", date: "2025-07-10" },
+        { name: "Rahul D", domain: "Web Dev", message: "My MERN stack project got selected in Smart India Hackathon.", date: "2025-07-05" }
+      ];
+      this.getExperiences = () => experiences;
+      this.addExperience = (exp) => experiences.push(exp);
+    });
+    app.directive('footerMessage', function() {
+      return {
+        template: `<div class="text-center mt-12 text-sm text-white drop-shadow">Made with ❤️ by Team CampusConnect+</div>`
+      };
+    });
+    app.controller('ExperienceController', function($scope, ExperienceService) {
+      $scope.experiences = ExperienceService.getExperiences();
+      $scope.newExperience = {};
+      $scope.addExperience = function() {
+        if ($scope.newExperience.name && $scope.newExperience.domain && $scope.newExperience.message && $scope.newExperience.date) {
+          ExperienceService.addExperience($scope.newExperience);
+          $scope.newExperience = {};
+        }
+      };
+    });
+  </script>
+  <style>
+    .custom-fade {
+      animation: fadeIn 0.7s ease-in;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</body>
+</html>

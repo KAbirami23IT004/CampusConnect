@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="noticeApp">
+<head>
+  <title>CampusConnect+ | Notice Board</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body class="font-sans min-h-screen bg-cover bg-center" style="background-image: url('tcebg.png');" ng-controller="NoticeController">
+  <header class="bg-white shadow-md py-4 px-8 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <img src="logo.png" alt="Logo" class="w-12 h-12">
+      <h1 class="text-2xl font-bold text-gray-800">CampusConnect+</h1>
+    </div>
+    <nav class="space-x-6 font-medium text-gray-700">
+      <a href="findmentors.html">Find Mentors</a>
+      <a href="experiencesharing.html">Experience Sharing Feed</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="teamformation.html">Team Formation</a>
+      <a href="home.html">Home</a>
+      <a href="profile.html">
+        <button class="bg-black text-white px-5 py-2 rounded">Profile</button>
+      </a>
+    </nav>
+  </header>
+  <main class="flex flex-col items-center mt-8 px-4">
+    <h2 class="text-4xl font-bold mb-6 text-black">Notice Board</h2>
+    <div class="bg-white bg-opacity-80 p-4 rounded-lg w-full max-w-4xl mb-6">
+      <label for="category" class="block text-gray-700 font-medium mb-2">Filter by Category:</label>
+      <select id="category" ng-model="selectedCategory" class="w-full px-4 py-2 border rounded">
+        <option value="">All</option>
+        <option ng-repeat="category in categories">{{category}}</option>
+      </select>
+    </div>
+    <div class="w-full max-w-4xl" ng-repeat="notice in filteredNotices = (notices | filter: { category: selectedCategory || undefined })">
+      <div class="bg-white bg-opacity-90 p-6 mb-6 rounded-lg shadow-lg" notice-hover>
+        <h3 class="text-xl font-bold text-gray-800">{{notice.title}}</h3>
+        <p class="text-sm text-gray-500 mt-1">{{notice.date | date:'fullDate'}}</p>
+        <p class="text-gray-700 my-3">{{notice.description}}</p>
+        <a class="text-blue-600 font-medium hover:underline" ng-href="{{notice.link}}" ng-click="logNoticeView(notice.title)">[View Details]</a>
+      </div>
+    </div>
+  </main>
+  <footer class="text-center py-3 bg-black text-white text-sm">
+    &copy; 2025 Campus Connect. All rights reserved.
+  </footer>
+  <script>
+    angular.module('noticeApp', [])
+    //CUSTOM SERVICE
+    .service('NoticeService', function() {
+      this.getNotices = function() {
+        return [
+          {
+            title: 'Seminar on Data Science',
+            date: new Date('2024-04-25'),
+            description: 'Join us for a seminar on data science topics.',
+            category: 'Events',
+            link: 'event-details.html#datascience'
+          },
+          {
+            title: 'Library Renovation',
+            date: new Date('2024-04-18'),
+            description: 'The library will be under renovation in May.',
+            category: 'Announcements',
+            link: 'announcement-details.html#library'
+          },
+          {
+            title: 'Campus Placement Drive',
+            date: new Date('2024-04-30'),
+            description: 'Top companies are coming to campus.',
+            category: 'Placements',
+            link: 'placement-details.html#drive'
+          },
+          {
+            title: 'Assignment Submission Deadline',
+            date: new Date('2024-04-20'),
+            description: 'Submit your assignments before 20th April.',
+            category: 'Deadlines',
+            link: 'deadline-details.html#assignment'
+          }
+        ];
+      };
+    })
+
+    // CUSTOM FACTORY
+    .factory('LogFactory', function() {
+      return {
+        log: function(msg) {
+          console.log('[NoticeLog]: ' + msg);
+        }
+      };
+    })
+
+    //CUSTOM DIRECTIVE 
+    .directive('noticeHover', function() {
+      return {
+        restrict: 'A',
+        link: function(scope, element) {
+          element.css({ transition: 'transform 0.2s ease-in-out' });
+          element.on('mouseenter', function() {
+            element.css('transform', 'scale(1.02)');
+          });
+          element.on('mouseleave', function() {
+            element.css('transform', 'scale(1)');
+          });
+        }
+      };
+    })
+
+    //CONTROLLER 
+    .controller('NoticeController', function($scope, $filter, NoticeService, LogFactory) {
+      $scope.categories = ['Events', 'Deadlines', 'Placements', 'Announcements'];
+      $scope.notices = NoticeService.getNotices();
+
+      $scope.logNoticeView = function(title) {
+        LogFactory.log('User clicked notice: ' + title);
+      };
+    });
+  </script>
+</body>
+</html>

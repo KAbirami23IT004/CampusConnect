@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="campusApp">
+<head>
+  <title>CampusConnect+ | Team Formation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body class="font-sans min-h-screen bg-cover bg-center" style="background-image: url('tcebg.png');" ng-controller="TeamController">
+  <header class="bg-white shadow-md py-4 px-8 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <img src="logo.png" alt="Logo" class="w-12 h-12">
+      <h1 class="text-2xl font-bold text-gray-800">CampusConnect+</h1>
+    </div>
+    <nav class="space-x-6 font-medium text-gray-700">
+      <a href="findmentors.html">Find Mentors</a>
+      <a href="experiencesharing.html">Experience Sharing Feed</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="noticeboard.html">Notice Board</a>
+      <a href="home.html">Home</a>
+      <a href="profile.html">
+        <button class="bg-black text-white px-5 py-2 rounded">Profile</button>
+      </a>
+    </nav>
+  </header>
+  <section class="flex flex-col items-center mt-8 px-4">
+    <h2 class="text-4xl font-bold mb-6 text-black">Team Formation</h2>
+    <input 
+      type="text" 
+      ng-model="searchText" 
+      placeholder="Search by name, skills, department" 
+      class="w-full max-w-xl mb-8 px-4 py-3 border rounded-lg">
+    <div class="bg-white bg-opacity-80 p-6 rounded-lg w-full max-w-4xl" 
+         ng-repeat="student in students | filter:searchText" 
+         student-card>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <div class="bg-blue-200 w-16 h-16 rounded-full flex items-center justify-center">
+            <span class="text-2xl text-white">👤</span>
+          </div>
+          <div>
+            <p class="text-lg font-bold text-gray-800">{{ student.name }}</p>
+            <p class="text-gray-600">{{ student.department }}</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="bg-gray-200 px-4 py-2 rounded-full text-gray-700 font-medium">
+            {{ student.skills.join(', ') }}
+          </div>
+          <button class="bg-blue-600 text-white px-4 py-2 rounded-lg" ng-click="sendRequest(student.name)">Send Request</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="text-center py-3 bg-black text-white text-sm">
+    &copy; 2025 Campus Connect. All rights reserved.
+  </footer>
+  <script>
+    angular.module('campusApp', [])
+    // CUSTOM SERVICE 
+    .service('StudentService', function() {
+      this.getStudents = function() {
+        return [
+          { name: 'John Doe', department: 'CSE', skills: ['C++', 'Python'] },
+          { name: 'Jane Smith', department: 'IT', skills: ['C', 'Java'] },
+          { name: 'Alex Lee', department: 'ECE', skills: ['Design', 'Web'] }
+        ];
+      };
+    })
+    // FACTORY
+    .factory('TeamLogFactory', function() {
+      return {
+        logRequest: function(name) {
+          console.log('[TeamRequest] Sent to: ' + name);
+        }
+      };
+    })
+    // DIRECTIVE
+    .directive('studentCard', function() {
+      return {
+        restrict: 'A',
+        link: function(scope, element) {
+          element.css({ transition: 'transform 0.2s ease-in-out' });
+          element.on('mouseenter', function() {
+            element.css('transform', 'scale(1.02)');
+          });
+          element.on('mouseleave', function() {
+            element.css('transform', 'scale(1)');
+          });
+        }
+      };
+    })
+    // CONTROLLER 
+    .controller('TeamController', function($scope, $timeout, StudentService, TeamLogFactory) {
+      $scope.searchText = '';
+      $scope.students = StudentService.getStudents();
+
+      $scope.sendRequest = function(name) {
+        TeamLogFactory.logRequest(name);
+        alert('Team request sent to ' + name);
+        $timeout(function() {
+          console.log('Confirmed request delivery to: ' + name);
+        }, 500);
+      };
+    });
+  </script>
+</body>
+</html>
