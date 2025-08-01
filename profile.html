@@ -1,269 +1,157 @@
+<!-- Updated profile.html with AngularJS Factory, Tailwind CSS, and unified header -->
 <!DOCTYPE html>
-<html lang="en" ng-app="profileApp" ng-controller="ProfileController">
+<html lang="en" ng-app="profileApp">
 <head>
   <title>Profile | CampusConnect</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: url("tceBG.png") center/cover no-repeat;
-      transition: background-color 0.4s ease;
-    }
-    body.dark {
-      background-color: #111;
-      color: #eee;
-    }
-
-    .site-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #fff;
-      padding: 10px 20px;
-      border-bottom: 1px solid #ccc;
-    }
-    .logo {
-      height: 45px;
-    }
-    .nav-group {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    .nav-group a {
-      text-decoration: none;
-      font-weight: 600;
-      color: #333;
-    }
-    .brand-title {
-      font-size: 24px;
-      font-weight: bold;
-      text-align: center;
-      flex-grow: 1;
-      text-align: center;
-    }
-    .signup-btn {
-      padding: 6px 14px;
-      background: black;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-left: 15px;
-    }
-
-    .profile-container {
-      display: flex;
-      justify-content: center;
-      padding: 40px 10px;
-    }
-    .profile-card {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 30px;
-      width: 500px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-    }
-    .profile-img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 10px;
-    }
-    .role { font-style: italic; }
-    .bio { margin: 10px 0; }
-    .socials a {
-      margin: 0 8px;
-      font-size: 22px;
-      color: #444;
-    }
-    .btn {
-      margin: 10px 5px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-    }
-    .edit { background: #4CAF50; color: white; }
-    .logout { background: #f44336; color: white; }
-
-    .section {
-      text-align: left;
-      margin-top: 20px;
-    }
-    .skill-tag {
-      display: inline-block;
-      background: #2196F3;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 15px;
-      margin: 3px;
-    }
-    .progress-bar {
-      background: #ddd;
-      height: 12px;
-      border-radius: 6px;
-      overflow: hidden;
-      margin-top: 8px;
-    }
-    .progress {
-      height: 100%;
-      background: #4caf50;
-      width: 0;
-    }
-    .theme-switch {
-      margin-top: 20px;
-    }
-    footer {
-      text-align: center;
-      background: #111;
-      color: white;
-      padding: 12px;
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body ng-class="{'dark': darkMode}">
-
-<!-- ✅ Updated Header -->
-<header class="site-header">
-  <div class="nav-group">
-    <img src="logo.png" class="logo" alt="Logo">
-    <a href="experiencesharing.html">Experience Sharing Feed</a>
-    <a href="noticeboard.html">Notice Board</a>
-    <a href="teamformation.html">Team Formation</a>
-  </div>
-
-  <div class="brand-title">CampusConnect+</div>
-
-  <div class="nav-group">
-    <a href="findmentors.html">Find Mentors</a>
-    <a href="leaderboard.html">Leaderboard</a>
-    <a href="home.html">Home</a>
-  </div>
-</header>
-
-<!-- Profile Section -->
-<div class="profile-container" fade-card>
-  <div class="profile-card">
-    <img class="profile-img" ng-src="{{ user.photo }}" alt="Profile Picture">
-    <h2>{{ user.name | uppercase }}</h2>
-    <p class="role">{{ user.role | capitalize }}</p>
-    <p class="bio">{{ user.bio }}</p>
-    <p><i class="fa fa-envelope"></i> {{ user.email }}</p>
-
-    <div class="socials">
-      <a ng-href="{{ user.linkedin }}" target="_blank"><i class="fab fa-linkedin"></i></a>
-      <a ng-href="{{ user.github }}" target="_blank"><i class="fab fa-github"></i></a>
+<body class="font-sans min-h-screen bg-cover bg-center" style="background-image: url('tcebg.png');" ng-controller="ProfileController" ng-class="{'dark': darkMode}">
+  <header class="bg-white shadow-md py-4 px-8 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <img src="logo.png" alt="Logo" class="w-12 h-12">
+      <h1 class="text-2xl font-bold text-gray-800">CampusConnect+</h1>
     </div>
+    <nav class="space-x-6 font-medium text-gray-700">
+      <a href="findmentors.html">Find Mentors</a>
+      <a href="experiencesharing.html">Experience Sharing Feed</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="teamformation.html">Team Formation</a>
+      <a href="home.html">Home</a>
+      <a href="profile.html">
+        <button class="bg-black text-white px-5 py-2 rounded">Profile</button>
+      </a>
+    </nav>
+  </header>
 
-    <button ng-click="editProfile()" class="btn edit">Edit Profile</button>
-    <button ng-click="logout()" class="btn logout">Logout</button>
+  <main class="flex justify-center items-center py-12">
+    <div class="bg-white bg-opacity-90 p-8 rounded-lg w-full max-w-xl shadow-lg" fade-card>
+      <img class="w-28 h-28 rounded-full mx-auto mb-4" ng-src="{{ user.photo }}" alt="Profile Picture">
+      <h2 class="text-2xl font-bold text-center">{{ user.name | uppercase }}</h2>
+      <p class="text-center italic text-gray-600">{{ user.role | capitalize }}</p>
+      <p class="text-center text-gray-700 my-2">{{ user.bio }}</p>
+      <p class="text-center text-sm text-gray-500"><i class="fa fa-envelope"></i> {{ user.email }}</p>
 
-    <hr>
-
-    <div class="section">
-      <h3>Skills</h3>
-      <span class="skill-tag" ng-repeat="skill in user.skills">{{ skill }}</span>
-    </div>
-
-    <div class="section">
-      <h3>Achievements</h3>
-      <ul>
-        <li ng-repeat="badge in user.badges">🏆 {{ badge }}</li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <h3>Recent Activities</h3>
-      <ul>
-        <li ng-repeat="activity in user.activities">{{ activity }}</li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <h3>Profile Completion</h3>
-      <div class="progress-bar">
-        <div class="progress" ng-style="{'width': user.completion + '%'}"></div>
+      <div class="flex justify-center space-x-4 mt-4">
+        <a ng-href="{{ user.linkedin }}" target="_blank" class="text-blue-700 text-xl"><i class="fab fa-linkedin"></i></a>
+        <a ng-href="{{ user.github }}" target="_blank" class="text-gray-800 text-xl"><i class="fab fa-github"></i></a>
       </div>
-      <small>{{ user.completion }}% Complete</small>
+
+      <div class="flex justify-center gap-4 mt-4">
+        <button ng-click="editProfile()" class="bg-green-600 text-white px-4 py-2 rounded">Edit Profile</button>
+        <button ng-click="logout()" class="bg-red-600 text-white px-4 py-2 rounded">Logout</button>
+      </div>
+
+      <div class="mt-6">
+        <h3 class="font-semibold text-lg">Skills</h3>
+        <div class="flex flex-wrap gap-2 mt-2">
+          <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm" ng-repeat="skill in user.skills">{{ skill }}</span>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <h3 class="font-semibold text-lg">Achievements</h3>
+        <ul class="list-disc list-inside">
+          <li ng-repeat="badge in user.badges">🏆 {{ badge }}</li>
+        </ul>
+      </div>
+
+      <div class="mt-6">
+        <h3 class="font-semibold text-lg">Recent Activities</h3>
+        <ul class="list-inside list-decimal">
+          <li ng-repeat="activity in user.activities">{{ activity }}</li>
+        </ul>
+      </div>
+
+      <div class="mt-6">
+        <h3 class="font-semibold text-lg">Profile Completion</h3>
+        <div class="w-full bg-gray-200 rounded-full h-4">
+          <div class="bg-green-500 h-4 rounded-full" ng-style="{'width': user.completion + '%'}"></div>
+        </div>
+        <p class="text-center mt-1 text-sm">{{ user.completion }}% Complete</p>
+      </div>
+
+      <div class="mt-6 flex items-center justify-center gap-2">
+        <label for="darkMode" class="text-sm">Dark Mode</label>
+        <input type="checkbox" id="darkMode" ng-model="darkMode" ng-change="toggleTheme()">
+      </div>
     </div>
+  </main>
 
-    <div class="theme-switch">
-      <label>Dark Mode</label>
-      <input type="checkbox" ng-model="darkMode" ng-change="toggleTheme()">
-    </div>
-  </div>
-</div>
+  <footer class="text-center py-3 bg-black text-white text-sm">
+    &copy; 2025 Campus Connect. All rights reserved.
+  </footer>
 
-<!-- Footer -->
-<footer>
-  © 2025 Campus Connect. All rights reserved.
-</footer>
+  <script>
+    const app = angular.module('profileApp', ['ngAnimate']);
 
-<!-- AngularJS Script -->
-<script>
-  const app = angular.module('profileApp', ['ngAnimate']);
-
-  app.filter('capitalize', function () {
-    return function (input) {
-      if (!input) return '';
-      return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
-    };
-  });
-
-  app.directive('fadeCard', function () {
-    return {
-      restrict: 'A',
-      link: function (scope, element) {
-        element.css({ opacity: 0 });
-        setTimeout(() => {
-          element.css({ transition: 'opacity 1s ease', opacity: 1 });
-        }, 200);
-      }
-    };
-  });
-
-  app.service('ProfileService', function () {
-    this.getUser = function () {
-      return {
-        name: 'John Doe',
-        role: 'student',
-        bio: 'Passionate about technology and innovation.',
-        email: 'johndoe@example.com',
-        photo: 'https://i.pravatar.cc/150?img=10',
-        linkedin: 'https://linkedin.com/in/johndoe',
-        github: 'https://github.com/johndoe',
-        skills: ['AngularJS', 'Node.js', 'Python', 'MongoDB'],
-        badges: ['Hackathon Winner', 'Top Contributor', 'Mentor'],
-        activities: ['Posted in Notice Board', 'Formed a Team', 'Shared an Experience'],
-        completion: 85
+    app.filter('capitalize', function () {
+      return function (input) {
+        if (!input) return '';
+        return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
       };
-    };
-  });
+    });
 
-  app.controller('ProfileController', ['$scope', 'ProfileService', function ($scope, ProfileService) {
-    $scope.user = ProfileService.getUser();
-    $scope.darkMode = false;
+    app.directive('fadeCard', function () {
+      return {
+        restrict: 'A',
+        link: function (scope, element) {
+          element.css({ opacity: 0 });
+          setTimeout(() => {
+            element.css({ transition: 'opacity 1s ease', opacity: 1 });
+          }, 200);
+        }
+      };
+    });
 
-    $scope.editProfile = function () {
-      alert('Redirect to edit page...');
-    };
+    app.factory('LoggerFactory', function () {
+      return {
+        log: function (msg) {
+          console.log('[ProfileLog]: ' + msg);
+        }
+      };
+    });
 
-    $scope.logout = function () {
-      alert('You have been logged out.');
-    };
+    app.service('ProfileService', function () {
+      this.getUser = function () {
+        return {
+          name: 'John Doe',
+          role: 'student',
+          bio: 'Passionate about technology and innovation.',
+          email: 'johndoe@example.com',
+          photo: 'https://i.pravatar.cc/150?img=10',
+          linkedin: 'https://linkedin.com/in/johndoe',
+          github: 'https://github.com/johndoe',
+          skills: ['AngularJS', 'Node.js', 'Python', 'MongoDB'],
+          badges: ['Hackathon Winner', 'Top Contributor', 'Mentor'],
+          activities: ['Posted in Notice Board', 'Formed a Team', 'Shared an Experience'],
+          completion: 85
+        };
+      };
+    });
 
-    $scope.toggleTheme = function () {
-      document.body.classList.toggle('dark', $scope.darkMode);
-    };
-  }]);
-</script>
+    app.controller('ProfileController', ['$scope', 'ProfileService', 'LoggerFactory', function ($scope, ProfileService, LoggerFactory) {
+      $scope.user = ProfileService.getUser();
+      $scope.darkMode = false;
+
+      $scope.editProfile = function () {
+        LoggerFactory.log('Edit profile clicked');
+        alert('Redirect to edit page...');
+      };
+
+      $scope.logout = function () {
+        LoggerFactory.log('User logged out');
+        alert('You have been logged out.');
+      };
+
+      $scope.toggleTheme = function () {
+        document.body.classList.toggle('dark', $scope.darkMode);
+        LoggerFactory.log('Theme toggled: ' + ($scope.darkMode ? 'Dark' : 'Light'));
+      };
+    }]);
+  </script>
 </body>
 </html>
